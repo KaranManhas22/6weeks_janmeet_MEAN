@@ -1,0 +1,30 @@
+name: Deploy Node.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.IP }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/6weeks_janmeet_MEAN
+            git pull origin main
+            npm install 
+            npm run build 
+            npm i http-server -g 
+            sudo npm i pm2 -g 
+            pm2 delete frontend
+            pm2 start http-server --name frontend -- dist/projectfront -p 4200
