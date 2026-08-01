@@ -22,9 +22,7 @@ jobs:
           script: |
             cd /home/ubuntu/6weeks_janmeet_MEAN
             git pull origin main
-            npm install 
-            npm run build 
-            npm i http-server -g 
-            sudo npm i pm2 -g 
+            sudo npm install 
+            sudo npm run build 
             pm2 delete frontend
             pm2 start http-server --name frontend -- dist/front-end -p 4200
